@@ -3,11 +3,8 @@ import shutil
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from dotenv import load_dotenv
+
 from app.routers import chat, document
-
-
-load_dotenv()
 
 
 @asynccontextmanager
@@ -15,6 +12,10 @@ async def lifespan(app: FastAPI):
     # TODO add documents.json creation
     if not os.path.exists("tmp"):
         os.mkdir("tmp")
+    doc_json_path = os.path.join("app", "documents.json")
+    if not os.path.exists(doc_json_path):
+        with open(doc_json_path, "w") as f:
+            f.write("{}")
     yield
     if os.path.exists("tmp"):
         shutil.rmtree("tmp")
