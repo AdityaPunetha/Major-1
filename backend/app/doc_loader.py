@@ -7,7 +7,9 @@ from langchain.document_loaders import PyPDFLoader, UnstructuredFileLoader
 from langchain.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
+from dotenv import load_dotenv
 
+load_dotenv()
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
     chunk_overlap=200,
@@ -18,7 +20,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 json_path = os.path.join(os.path.dirname(__file__), "documents.json")
 
 embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key="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",
+    api_key=os.environ["hf_token"],
     model_name="sentence-transformers/all-MiniLM-l6-v2",
 )
 
@@ -54,8 +56,8 @@ def store_to_df(store: FAISS):
 def add_to_vectorDB(docs):
     chunks = text_splitter.split_documents(docs)
     if os.path.exists("FAISS"):
-        db = FAISS.load_local("FAISS")
-        db.add_documents(chunks, embeddings)
+        db = FAISS.load_local("FAISS", embeddings=embeddings)
+        db.add_documents(chunks)
     else:
         db = FAISS.from_documents(chunks, embeddings)
     db.save_local("FAISS")
