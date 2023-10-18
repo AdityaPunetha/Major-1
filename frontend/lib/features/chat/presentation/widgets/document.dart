@@ -3,8 +3,17 @@ import 'package:frontend/features/chat/presentation/widgets/checkbox.dart';
 import 'package:frontend/features/chat/presentation/widgets/delete.dart';
 
 class DocumentWidget extends StatelessWidget {
-  final String textData;
-  const DocumentWidget({super.key, required this.textData});
+  final String documentName;
+  final String documentID;
+  const DocumentWidget(
+      {super.key, required this.documentName, required this.documentID});
+
+  factory DocumentWidget.fromJson(Map<String, dynamic> json) {
+    return DocumentWidget(
+      documentName: json['docName'],
+      documentID: json['docID'],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +25,7 @@ class DocumentWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(children: [
         const CheckboxWidget(value: false, onChanged: true),
-        Text(textData, style: TextStyle(color: Colors.black)),
+        Text(documentName, style: TextStyle(color: Colors.black)),
         const DeleteWidget(
           enabled: true,
         ),

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) {
-          return ConversationPage();
+          return const ConversationPage();
         },
       },
     );
