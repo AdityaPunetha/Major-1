@@ -36,9 +36,56 @@ class _ConversationPageState extends State<ConversationPage> {
                 ),
               ]),
             ),
-          ]),
-        )
-      ]),
+            Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            // boxShadow: glowBoxShadow,
+                            color: Colors.white,
+                          ),
+                          // chat-like display area
+                          // a chat-like UI where the user can ask questions and receive responses.
+                        ),
+                      ),
+                      //search bar with a send symbol at the bottom
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          // boxShadow: glowBoxShadow,
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: "Search...",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.send),
+                              onPressed: () {
+                                // Implement your send action here
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
     );
   }
 }
