@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 from uuid import uuid4
 
 from fastapi import HTTPException
@@ -10,6 +11,7 @@ from langchain.vectorstores import FAISS
 from dotenv import load_dotenv
 
 load_dotenv()
+
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
     chunk_overlap=200,
@@ -30,59 +32,68 @@ def get_documents_from_json():
         data = json.load(f)
     res = []
     for k, v in data.items():
-        res.append({"docName": v, "docID": k})
+        res.append({"docName": v["docName"], "docID": k})
     return res
 
 
-def add_doc_to_json(document_id, document_name):
+def add_doc_to_json(document_id: str, document_name: str, chunk_ids: list):
+    logging.info(f"Adding {document_name} to json")
     with open(json_path, "r") as f:
         documents = json.load(f)
-    documents[document_id] = document_name
+    document = {"docName": document_name, "docID": document_id, "chunks": chunk_ids}
+    documents[document_id] = document
     with open(json_path, "w") as f:
         json.dump(documents, f, indent=4)
 
 
-def delete_doc_from_json(document_id):
-    documents = get_documents_from_json()
+def delete_doc_from_json(document_id: str):
+    with open(json_path, "r") as f:
+        documents = json.load(f)
+    # TODO: Check if document_id exists
     del documents[document_id]
     with open(json_path, "w") as f:
         json.dump(documents, f, indent=4)
 
 
-def store_to_df(store: FAISS):
-    # TODO: Implement this
-    v_dict = store.docstore._dict
-    data_rows = []
-    for k in v_dict.keys():
-        doc_name = v_dict[k]
-
-
-def add_to_vectorDB(docs):
-    chunks = text_splitter.split_documents(docs)
-    if os.path.exists("FAISS"):
-        db = FAISS.load_local("FAISS", embeddings=embeddings)
-        db.add_documents(chunks)
-    else:
-        db = FAISS.from_documents(chunks, embeddings)
+def add_to_vectorDB(files: list):
+    for file in files:
+        docs, doc_id = load_doc(file)
+        chunks = text_splitter.split_documents(docs)
+        if os.path.exists("FAISS"):
+            db = FAISS.load_local("FAISS", embeddings=embeddings)
+            chunk_IDs = db.add_documents(chunks)
+        else:
+            chunk_IDs = [str(uuid4()) for _ in chunks]
+            db = FAISS.from_documents(chunks, embeddings, ids=chunk_IDs)
+        add_doc_to_json(doc_id, file.filename, chunk_IDs)
     db.save_local("FAISS")
 
 
-def load_doc(files: list):
+def delete_from_vectorDB(document_id: str):
+    with open(json_path, "r") as f:
+        documents = json.load(f)
+    # TODO: Check if document_id exists
+    chunk_ids = documents[document_id]["chunks"]
+    db = FAISS.load_local("FAISS", embeddings=embeddings)
+    db.delete(chunk_ids)
+    delete_doc_from_json(document_id)
+    db.save_local("FAISS")
+
+
+def load_doc(file):
     documents = []
-    for file in files:
-        filepath = os.path.join("tmp", file.filename)
-        extension = file.filename.split(".")[-1]
-        match extension:
-            case "pdf":
-                loader = PyPDFLoader(filepath)
-            case "txt":
-                loader = UnstructuredFileLoader(filepath)
-            case _:
-                raise HTTPException(status_code=415, detail="Unkown Filetype")
-        data = loader.load()
-        doc_id = str(uuid4())
-        for doc in data:
-            doc.metadata["doc_id"] = doc_id
-            documents.append(doc)
-        add_doc_to_json(doc_id, file.filename)
-    return documents
+    filepath = os.path.join("tmp", file.filename)
+    extension = file.filename.split(".")[-1]
+    match extension:
+        case "pdf":
+            loader = PyPDFLoader(filepath)
+        case "txt":
+            loader = UnstructuredFileLoader(filepath)
+        case _:
+            raise HTTPException(status_code=415, detail="Unkown Filetype")
+    data = loader.load()
+    doc_id = str(uuid4())
+    for doc in data:
+        doc.metadata["doc_id"] = doc_id
+        documents.append(doc)
+    return documents, doc_id

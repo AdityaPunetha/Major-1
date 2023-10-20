@@ -1,7 +1,11 @@
 import os
 
 from fastapi import APIRouter, UploadFile
-from app.doc_loader import add_to_vectorDB, get_documents_from_json, load_doc
+from app.doc_loader import (
+    add_to_vectorDB,
+    get_documents_from_json,
+    delete_from_vectorDB,
+)
 
 router = APIRouter(prefix="/document", tags=["Documents"])
 
@@ -16,12 +20,11 @@ async def create_document(files: list[UploadFile]):
     for file in files:
         with open(os.path.join("tmp", file.filename), "wb") as f:
             f.write(file.file.read())
-    docs = load_doc(files)
-    add_to_vectorDB(docs)
+    add_to_vectorDB(files)
     return {"message": "Document added"}
 
 
 @router.delete("/{document_id}")
 async def delete_document(document_id: str):
-    # delete_doc_from_json(document_id)
+    delete_from_vectorDB(document_id)
     return {"message": "Document deleted"}
