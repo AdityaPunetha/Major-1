@@ -17,38 +17,42 @@ class _ConversationPageState extends State<ConversationPage> {
   List<Widget> messageWidgets = []; // List to store message widgets
 
   void receiveMessage(String message) {
-  setState(() {
-    final userMessageWidget = MessageWidget(text: message, isSentByUser: true);
-    messageWidgets.add(userMessageWidget);
+    setState(() {
+      final userMessageWidget =
+          MessageWidget(text: message, isSentByUser: true);
+      messageWidgets.add(userMessageWidget);
 
-    // Simulate a delay before the chatbot's reply
-    Future.delayed(const Duration(seconds: 1), () {
-      const chatbotReply = "Hello, what do you want to know?";
-      const chatbotMessageWidget = MessageWidget(text: chatbotReply, isSentByUser: false);
-      messageWidgets.add(chatbotMessageWidget);
-      setState(() {}); // Trigger a rebuild to show the chatbot's reply
+      // Simulate a delay before the chatbot's reply
+      Future.delayed(const Duration(seconds: 1), () {
+        const chatbotReply = "Hello, what do you want to know?";
+        const chatbotMessageWidget =
+            MessageWidget(text: chatbotReply, isSentByUser: false);
+        messageWidgets.add(chatbotMessageWidget);
+        setState(() {}); // Trigger a rebuild to show the chatbot's reply
+      });
+
+      messageController.clear(); // Clear the input field
     });
-
-    messageController.clear(); // Clear the input field
-  });
-}
+  }
 
   void sendMessage(String message) {
-  setState(() {
+    // setState(() {
     final userMessageWidget = MessageWidget(text: message, isSentByUser: true);
-    messageWidgets.add(userMessageWidget);
+    // messageWidgets.add(userMessageWidget);
     messageController.clear(); // Clear the input field
 
     // Simulate a delay before the chatbot's reply
     Future.delayed(const Duration(seconds: 1), () {
       const chatbotReply = "Hello, what do you want to know?";
-      const chatbotMessageWidget = MessageWidget(text: chatbotReply, isSentByUser: false);
-      messageWidgets.add(chatbotMessageWidget);
-      setState(() {}); // Trigger a rebuild to show the chatbot's reply
+      const chatbotMessageWidget =
+          MessageWidget(text: chatbotReply, isSentByUser: false);
+      setState(() {
+        messageWidgets.add(userMessageWidget);
+        messageWidgets.add(chatbotMessageWidget);
+      }); // Trigger a rebuild to show the chatbot's reply
     });
-  });
-}
-
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,8 @@ class _ConversationPageState extends State<ConversationPage> {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   width: 300,
                   decoration: BoxDecoration(
                     boxShadow: glowBoxShadow,
@@ -84,8 +89,9 @@ class _ConversationPageState extends State<ConversationPage> {
                           decoration: const BoxDecoration(
                             color: Colors.white,
                           ),
-                          child: ListView(
-                            children: messageWidgets,
+                          child: ListView.builder(
+                            itemCount: messageWidgets.length,
+                            itemBuilder: (_, i) => messageWidgets[i],
                           ),
                         ),
                       ),
@@ -135,7 +141,8 @@ class MessageWidget extends StatelessWidget {
   final String text;
   final bool isSentByUser;
 
-  const MessageWidget({super.key, required this.text, required this.isSentByUser});
+  const MessageWidget(
+      {super.key, required this.text, required this.isSentByUser});
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +152,9 @@ class MessageWidget extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: isSentByUser ? Colors.blue : Colors.grey, // Blue box for user messages
+          color: isSentByUser
+              ? Colors.blue
+              : Colors.grey, // Blue box for user messages
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
