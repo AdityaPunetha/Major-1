@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/features/chat/presentation/widgets/documentList.dart';
+import 'package:frontend/features/widgets/documentList.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 

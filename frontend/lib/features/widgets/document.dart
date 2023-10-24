@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/chat/presentation/widgets/checkbox.dart';
-import 'package:frontend/features/chat/presentation/widgets/delete.dart';
+import 'package:frontend/features/widgets/checkbox.dart';
+import 'package:frontend/features/widgets/delete.dart';
 
 class DocumentWidget extends StatelessWidget {
   final String documentName;
