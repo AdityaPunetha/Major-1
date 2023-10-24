@@ -1,17 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/features/chat/presentation/widgets/documentList.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class UploadDocumentWidget extends StatelessWidget {
   const UploadDocumentWidget({super.key});
-
-  void getFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: Platform.isWindows,
-        allowedExtensions: ['pdf']);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,5 +19,29 @@ class UploadDocumentWidget extends StatelessWidget {
       },
       child: const Text('Select Document'),
     );
+  }
+
+  void getFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowMultiple: true, allowedExtensions: ['pdf']);
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+      final request = http.MultipartRequest(
+          'POST', (Uri.parse("http://127.0.0.1:8000/document/")));
+      for (File filePath in files) {
+        final file = await http.MultipartFile.fromPath('files', filePath.path);
+        request.files.add(file);
+      }
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        // print('Files uploaded successfully');
+        const DocumentListWidget().refresh();
+      } else {
+        print('Failed to upload files. Status code: ${response.statusCode}');
+      }
+    } else {
+      // User canceled the picker
+    }
   }
 }

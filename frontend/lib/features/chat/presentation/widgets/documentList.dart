@@ -11,6 +11,10 @@ class DocumentListWidget extends StatefulWidget {
 
   @override
   State<DocumentListWidget> createState() => _DocumentListWidgetState();
+
+  void refresh() {
+    _DocumentListWidgetState().refresh();
+  }
 }
 
 class _DocumentListWidgetState extends State<DocumentListWidget> {
@@ -34,6 +38,7 @@ class _DocumentListWidgetState extends State<DocumentListWidget> {
           .toList();
       List<Widget> lastList = [];
       for (var i = 0; i < posts.length; i++) {
+        // TODO: Too many docs, scrollbar
         lastList.add(posts[i]);
         lastList.add(SizedBox(
           height: 10,
@@ -43,6 +48,10 @@ class _DocumentListWidgetState extends State<DocumentListWidget> {
     } else {
       throw "Unable to retrieve posts.";
     }
+  }
+
+  void refresh() {
+    setState(() {});
   }
 
   @override
@@ -56,6 +65,7 @@ class _DocumentListWidgetState extends State<DocumentListWidget> {
             List<Widget>? posts = snapshot.data;
             return Column(children: posts!.toList());
           } else {
+            // TODO: On fail to connect with backend
             return Center(child: CircularProgressIndicator());
           }
         },
