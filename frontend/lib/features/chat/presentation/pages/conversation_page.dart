@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/chat/presentation/widgets/chat_interface.dart';
 import 'package:frontend/features/chat/presentation/widgets/document.dart';
 import 'package:frontend/features/chat/presentation/widgets/documentList.dart';
 import 'package:frontend/features/chat/presentation/widgets/uploadDocument.dart';
+import 'package:frontend/features/chat/presentation/widgets/message_list.dart';
 // import 'package:frontend/features/chat/presentation/widgets/left_nav_button_widget.dart';
 import 'package:frontend/global/common/common.dart';
 
@@ -36,6 +38,9 @@ class _ConversationPageState extends State<ConversationPage> {
                   height: 10,
                 ),
               ]),
+            ),
+            const Expanded(
+              child: ChatInterface(),
             ),
           ]),
         )
