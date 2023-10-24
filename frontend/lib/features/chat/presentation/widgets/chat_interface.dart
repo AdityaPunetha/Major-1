@@ -8,11 +8,10 @@ class ChatInterface extends StatefulWidget {
   State<ChatInterface> createState() => _ChatInterfaceState();
 }
 
-
 class _ChatInterfaceState extends State<ChatInterface> {
-  final messageList = MessageList();
+  MessageList messageList = MessageList(); // Create an instance of MessageList
+
   TextEditingController messageController = TextEditingController();
-  List<ChatMessage> messages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +25,9 @@ class _ChatInterfaceState extends State<ChatInterface> {
                 color: Colors.white,
               ),
               child: ListView.builder(
-                itemCount: messages.length,
+                itemCount: messageList.messageWidgets.length,
                 itemBuilder: (_, i) {
-                  final message = messages[i];
-                  return MessageWidget(
-                    text: message.text,
-                    isSentByUser: message.isSentByUser,
-                  );
+                  return messageList.messageWidgets[i];
                 },
               ),
             ),
@@ -60,11 +55,8 @@ class _ChatInterfaceState extends State<ChatInterface> {
                   onPressed: () {
                     String message = messageController.text;
                     if (message.isNotEmpty) {
-                      // Add the user message
-                      messages.add(ChatMessage(text: message, isSentByUser: true));
-                      // Simulate the chatbot reply
-                      messages.add(ChatMessage(text: "Hello, what do you want to know?", isSentByUser: false));
-                      // Clear the input field and update the UI
+                      // Use the MessageList instance to send and receive messages
+                      messageList.sendMessage(message);
                       messageController.clear();
                       setState(() {});
                     }
@@ -77,11 +69,4 @@ class _ChatInterfaceState extends State<ChatInterface> {
       ),
     );
   }
-}
-
-class ChatMessage {
-  final String text;
-  final bool isSentByUser;
-
-  ChatMessage({required this.text, required this.isSentByUser});
 }
