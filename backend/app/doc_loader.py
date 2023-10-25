@@ -28,11 +28,15 @@ embeddings = HuggingFaceInferenceAPIEmbeddings(
 def get_documents_from_json():
     with open(json_path, "r") as f:
         data = json.load(f)
-    return data
+    res = []
+    for k, v in data.items():
+        res.append({"docName": v, "docID": k})
+    return res
 
 
 def add_doc_to_json(document_id, document_name):
-    documents = get_documents_from_json()
+    with open(json_path, "r") as f:
+        documents = json.load(f)
     documents[document_id] = document_name
     with open(json_path, "w") as f:
         json.dump(documents, f, indent=4)
