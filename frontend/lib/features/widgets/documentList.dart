@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/chat/presentation/widgets/document.dart';
+import 'package:frontend/features/widgets/document.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 

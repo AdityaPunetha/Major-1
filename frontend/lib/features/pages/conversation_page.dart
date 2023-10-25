@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/chat/presentation/widgets/document.dart';
-import 'package:frontend/features/chat/presentation/widgets/documentList.dart';
-import 'package:frontend/features/chat/presentation/widgets/uploadDocument.dart';
+import 'package:frontend/features/widgets/document.dart';
+import 'package:frontend/features/widgets/documentList.dart';
+import 'package:frontend/features/widgets/uploadDocument.dart';
 // import 'package:frontend/features/chat/presentation/widgets/left_nav_button_widget.dart';
 import 'package:frontend/global/common/common.dart';
 
