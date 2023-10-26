@@ -31,6 +31,22 @@ class AIMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey,
+            )),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.blue),
+        ),
+      ),
+    );
   }
 }

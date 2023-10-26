@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/widgets/message_list.dart';
+import 'package:frontend/features/widgets/chat/message_list.dart';
 
 class ChatInput extends StatefulWidget {
   const ChatInput({super.key});
@@ -32,15 +32,16 @@ class _ChatInputState extends State<ChatInput> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: () {
-              String message = messageController.text;
-              if (message.isNotEmpty) {
-                messageController.clear();
-                MessageList.sendMessage(message);
-              }
-            },
-          ),
+              icon: const Icon(Icons.send),
+              onPressed: () {
+                String message = messageController.text;
+                if (message.isNotEmpty) {
+                  messageController.clear();
+                  MessageListState? messageListState =
+                      MessageList.messageListKey.currentState;
+                  messageListState?.sendMessage(message);
+                }
+              }),
         ],
       ),
     );
