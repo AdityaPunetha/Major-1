@@ -11,3 +11,12 @@ final glowBoxShadow = [
     ),
   ),
 ];
+
+class RoutingBase {
+  static const apiUrl = "http://127.0.0.1:8000";
+}
+
+class RoutingBalance extends RoutingBase {
+  static const documents = "${RoutingBase.apiUrl}/document/";
+  static const chat = "${RoutingBase.apiUrl}/chat/";
+}

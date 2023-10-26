@@ -8,9 +8,7 @@ class ChatInterface extends StatefulWidget {
   State<ChatInterface> createState() => _ChatInterfaceState();
 }
 
-
 class _ChatInterfaceState extends State<ChatInterface> {
-  final messageList = MessageList();
   TextEditingController messageController = TextEditingController();
   List<ChatMessage> messages = [];
 
@@ -61,9 +59,12 @@ class _ChatInterfaceState extends State<ChatInterface> {
                     String message = messageController.text;
                     if (message.isNotEmpty) {
                       // Add the user message
-                      messages.add(ChatMessage(text: message, isSentByUser: true));
+                      messages
+                          .add(ChatMessage(text: message, isSentByUser: true));
                       // Simulate the chatbot reply
-                      messages.add(ChatMessage(text: "Hello, what do you want to know?", isSentByUser: false));
+                      messages.add(ChatMessage(
+                          text: "Hello, what do you want to know?",
+                          isSentByUser: false));
                       // Clear the input field and update the UI
                       messageController.clear();
                       setState(() {});

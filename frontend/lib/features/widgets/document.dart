@@ -20,12 +20,12 @@ class DocumentWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, 255, 255),
+          color: const Color.fromARGB(255, 255, 255, 255),
           borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(children: [
         const CheckboxWidget(value: false, onChanged: true),
-        Text(documentName, style: TextStyle(color: Colors.black)),
+        Text(documentName, style: const TextStyle(color: Colors.black)),
         const DeleteWidget(
           enabled: true,
         ),
