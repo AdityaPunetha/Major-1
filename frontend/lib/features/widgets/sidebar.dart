@@ -10,16 +10,19 @@ class Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends State<Sidebar> {
+  // TODO: Solve overflow issue
+  DocumentListWidget documentList =
+      DocumentListWidget(key: DocumentListWidget.documentListKey);
   @override
   Widget build(BuildContext context) {
-    return const Column(children: [
-      DocumentListWidget(),
-      Spacer(),
-      SizedBox(
+    return Column(children: [
+      documentList,
+      const Spacer(),
+      const SizedBox(
         height: 10,
       ),
-      UploadDocumentWidget(),
-      SizedBox(
+      const UploadDocumentWidget(),
+      const SizedBox(
         height: 10,
       ),
     ]);

@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
             Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                width: 300,
+                width: 400,
                 decoration: BoxDecoration(
                     boxShadow: glowBoxShadow,
                     color: const Color.fromARGB(255, 239, 239, 239)),

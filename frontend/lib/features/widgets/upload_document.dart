@@ -23,6 +23,7 @@ class UploadDocumentWidget extends StatelessWidget {
         type: FileType.custom, allowMultiple: true, allowedExtensions: ['pdf']);
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();
+      // change routing base
       final request = http.MultipartRequest(
           'POST', (Uri.parse("http://127.0.0.1:8000/document/")));
       for (File filePath in files) {
@@ -30,10 +31,11 @@ class UploadDocumentWidget extends StatelessWidget {
         request.files.add(file);
       }
       final response = await request.send();
-
+      // TODO put waiting sign of some sort
       if (response.statusCode == 200) {
-        // print('Files uploaded successfully');
-        const DocumentListWidget().refresh();
+        DocumentListWidgetState? documentListWidgetState =
+            DocumentListWidget.documentListKey.currentState;
+        documentListWidgetState?.refresh();
       } else {
         print('Failed to upload files. Status code: ${response.statusCode}');
       }

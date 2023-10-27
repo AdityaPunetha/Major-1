@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/widgets/document_list.dart';
+import 'package:http/http.dart' as http;
+import 'package:frontend/global/common.dart';
 import 'package:frontend/features/widgets/checkbox.dart';
-import 'package:frontend/features/widgets/delete.dart';
 
 class DocumentWidget extends StatelessWidget {
   final String documentName;
@@ -26,8 +28,16 @@ class DocumentWidget extends StatelessWidget {
       child: Row(children: [
         const CheckboxWidget(value: false, onChanged: true),
         Text(documentName, style: const TextStyle(color: Colors.black)),
-        const DeleteWidget(
-          enabled: true,
+        IconButton(
+          icon: const Icon(Icons.delete, color: Colors.red),
+          onPressed: () async {
+            Uri url = Uri.parse("${RoutingBalance.documents}$documentID");
+            http.Response res = await http.delete(url);
+            // TODO: add response code handling
+            DocumentListWidgetState? documentListWidgetState =
+                DocumentListWidget.documentListKey.currentState;
+            documentListWidgetState?.refresh();
+          },
         ),
       ]),
     );

@@ -4,22 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/widgets/document.dart';
 import 'package:frontend/global/common.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 class DocumentListWidget extends StatefulWidget {
   const DocumentListWidget({super.key});
+  static final GlobalKey<DocumentListWidgetState> documentListKey =
+      GlobalKey<DocumentListWidgetState>();
 
   @override
-  State<DocumentListWidget> createState() => _DocumentListWidgetState();
-
-  void refresh() {
-    _DocumentListWidgetState().refresh();
-  }
+  State<DocumentListWidget> createState() => DocumentListWidgetState();
 }
 
-class _DocumentListWidgetState extends State<DocumentListWidget> {
+class DocumentListWidgetState extends State<DocumentListWidget> {
   Future<List<Widget>> fetchDocuments() async {
-    Response res = await http.get(Uri.parse(RoutingBalance.documents));
+    http.Response res = await http.get(Uri.parse(RoutingBalance.documents));
 
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -36,6 +33,14 @@ class _DocumentListWidgetState extends State<DocumentListWidget> {
         lastList.add(const SizedBox(
           height: 10,
         ));
+        lastList.add(
+          CheckboxListTile(
+            tileColor: Colors.red,
+            title: const Text('CheckboxListTile with red background'),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        );
       }
       return lastList;
     } else {
