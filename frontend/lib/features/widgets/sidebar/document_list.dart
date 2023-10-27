@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/widgets/document.dart';
+import 'package:frontend/features/widgets/sidebar/document.dart';
 import 'package:frontend/global/common.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,15 +15,16 @@ class DocumentListWidget extends StatefulWidget {
 }
 
 class DocumentListWidgetState extends State<DocumentListWidget> {
+  Set<String> selectedDocs = {};
   Future<List<Widget>> fetchDocuments() async {
     http.Response res = await http.get(Uri.parse(RoutingBalance.documents));
 
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
 
-      List<DocumentWidget> docs = body
+      List<Document> docs = body
           .map(
-            (dynamic item) => DocumentWidget.fromJson(item),
+            (dynamic item) => Document.fromJson(item),
           )
           .toList();
       List<Widget> lastList = [];
@@ -33,14 +34,6 @@ class DocumentListWidgetState extends State<DocumentListWidget> {
         lastList.add(const SizedBox(
           height: 10,
         ));
-        lastList.add(
-          CheckboxListTile(
-            tileColor: Colors.red,
-            title: const Text('CheckboxListTile with red background'),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        );
       }
       return lastList;
     } else {

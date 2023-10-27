@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/widgets/document_list.dart';
-import 'package:frontend/features/widgets/upload_document.dart';
+import 'package:frontend/features/widgets/sidebar/document_list.dart';
+import 'package:frontend/features/widgets/sidebar/upload_document.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});

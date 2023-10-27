@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/features/widgets/document_list.dart';
+import 'package:frontend/features/widgets/sidebar/document_list.dart';
 import 'package:http/http.dart' as http;
 
 class UploadDocumentWidget extends StatelessWidget {
