@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-class UserMessage extends StatelessWidget {
+abstract class Message extends StatelessWidget {
   final String text;
-  const UserMessage({super.key, required this.text});
+  const Message({super.key, required this.text});
+}
+
+class UserMessage extends Message {
+  const UserMessage({super.key, required super.text});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +28,9 @@ class UserMessage extends StatelessWidget {
   }
 }
 
-class AIMessage extends StatelessWidget {
-  final String text;
+class AIMessage extends Message {
   final String? reference;
-  const AIMessage({super.key, required this.text, this.reference});
+  const AIMessage({super.key, required super.text, this.reference});
 
   @override
   Widget build(BuildContext context) {

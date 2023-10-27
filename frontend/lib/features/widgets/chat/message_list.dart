@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/features/widgets/chat/message.dart';
+import 'package:frontend/features/widgets/sidebar/document_list.dart';
+import 'package:frontend/global/common.dart';
+import 'package:http/http.dart' as http;
 
 class MessageList extends StatefulWidget {
   const MessageList({super.key});
@@ -10,10 +15,25 @@ class MessageList extends StatefulWidget {
 }
 
 class MessageListState extends State<MessageList> {
-  List<Widget> messageWidgets = [];
+  List<Message> messageWidgets = [];
 
-  void sendMessage(String message) {
+  void sendMessage(String message) async {
     final userMessageWidget = UserMessage(text: message);
+    DocumentListWidgetState? documentListWidgetState =
+        DocumentListWidget.documentListKey.currentState;
+    String body = jsonEncode(<String, dynamic>{
+      "message": message,
+      "chat_history": messageWidgets.map((e) => e.text).toList(),
+      "selected_document": documentListWidgetState?.selectedDocs.toList()
+    });
+
+    var response = await http.post(Uri.parse(RoutingBalance.documents),
+        headers: <String, String>{
+          "Content-Type": "application/json",
+          "accept": "application/json"
+        },
+        body: body);
+
     const chatbotReply = "Hello, what do you want to know?";
     const chatbotMessageWidget = AIMessage(text: chatbotReply);
     setState(() {
