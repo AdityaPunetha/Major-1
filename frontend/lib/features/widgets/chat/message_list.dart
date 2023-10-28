@@ -27,7 +27,7 @@ class MessageListState extends State<MessageList> {
       "selected_document": documentListWidgetState?.selectedDocs.toList()
     });
 
-    var response = await http.post(Uri.parse(RoutingBalance.documents),
+    var response = await http.post(Uri.parse(RoutingBalance.chat),
         headers: <String, String>{
           "Content-Type": "application/json",
           "accept": "application/json"
