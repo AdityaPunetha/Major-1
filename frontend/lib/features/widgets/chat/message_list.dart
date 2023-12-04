@@ -23,7 +23,9 @@ class MessageListState extends State<MessageList> {
         DocumentListWidget.documentListKey.currentState;
     String body = jsonEncode(<String, dynamic>{
       "message": message,
-      "chat_history": messageWidgets.map((e) => e.text).toList(),
+      "chat_history": messageWidgets
+          .map((e) => [e.text, e.runtimeType.toString()])
+          .toList(),
       "selected_document": documentListWidgetState?.selectedDocs.toList()
     });
 
@@ -33,9 +35,12 @@ class MessageListState extends State<MessageList> {
           "accept": "application/json"
         },
         body: body);
-
-    const chatbotReply = "Hello, what do you want to know?";
-    const chatbotMessageWidget = AIMessage(text: chatbotReply);
+    var chatbotResponse = jsonDecode(response.body);
+    var references = chatbotResponse["references"];
+    var chatbotReply = chatbotResponse["reply"];
+    print(references);
+    var chatbotMessageWidget =
+        AIMessage(text: chatbotReply, reference: references);
     setState(() {
       messageWidgets.add(userMessageWidget);
       messageWidgets.add(chatbotMessageWidget);
